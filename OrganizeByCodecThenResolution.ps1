@@ -32,15 +32,9 @@ foreach($Item in $RefFiles){
 }
 
 #Output Objects for line by line running/checking
-  $ParsedObjects | select 'File Name','Video Format Video Frame Video Codec'
+  #$ParsedObjects | select 'File Name','Video Format Video Frame Video Codec'
 
-#Select uniqueformats and create a folder for each of them.
-  $UniqueFormats = $ParsedObjects | select 'Video Format Video Frame Video Codec' -unique
-  $UniqueFormats | ForEach-Object {
-          New-Item -Path ($TargetDirectory + '\' + $_.'Video Format Video Frame Video Codec') -ItemType Directory
-      }
-
-#Only move items with a valid codec into the newly created codec files.
+#Items with a valid codec will have a folder created (if not already exists) and moved into the folder.
   $ObjectsWithCodec = $ParsedObjects | where {$null -ne $_.'Video Format Video Frame Video Codec'}
   foreach($item in $ObjectsWithCodec){
       $ItemPath = ($item.Directory + "/" + $item.'file name')
